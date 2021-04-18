@@ -21,12 +21,61 @@ HunterGate(
 cable_set_build_type(DEFAULT RelWithDebInfo CONFIGURATION_TYPES Debug Release RelWithDebInfo)
 
 
-# ============================================== #
+# ====================== Project Details ======================== #
 
 project(FPGA_BUILD)
 set(PROJECT_VERSION 0.01)
 
+set(FPGA_PLATFORM "u280")
+
+## Xilinx
+set(XILINX_VITIS $ENV{XILINX_VITIS})
+set(XILINX_VIVADO $ENV{XILINX_VIVADO})
+set(XCL_KERNEL $ENV{XCL_KERNEL})
+set(XCL_OPT_INDEX $ENV{XCL_OPT_INDEX})
+set(XCL_EMULATION_MODE $ENV{XCL_EMULATION_MODE})
+set(XCL_CU $ENV{XCL_CU})
+set(XCL_PLATFORM $ENV{XCL_PLATFORM})
+set(XCL_OPTS none buffered dataflow distributed vec h2k k2k)
+# list(GET XCL_OPTS ${XCL_OPT_INDEX} XCL_OPT)
+
+## Xilinx Runtime
+set(XILINX_XRT $ENV{XILINX_XRT})
+set(XRT_PROFILE "true")
+set(XRT_TIMELINE_TRACE "true")
+set(XRT_DATA_TRANSFER_TRACE "fine")
+
 # ============================================== #
+
+
+
+
+# ====================== BOOST, jsoncpp, ethash ======================== #
+
+
+hunter_add_package(Boost COMPONENTS system filesystem thread)
+find_package(Boost CONFIG REQUIRED COMPONENTS system filesystem thread)
+
+hunter_add_package(jsoncpp)
+find_package(jsoncpp CONFIG REQUIRED)
+
+hunter_add_package(ethash)
+find_package(ethash CONFIG REQUIRED)
+
+
+# ============================================== #
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 add_executable(${PROJECT_NAME} main.cpp)
