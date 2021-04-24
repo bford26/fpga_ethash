@@ -1,3 +1,5 @@
+set(CMAKE_CXX_STANDARD 14)
+
 set(SOURCES
 	EthashAux.h EthashAux.cpp
 	Farm.cpp Farm.h
