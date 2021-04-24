@@ -33,39 +33,42 @@ FPGAMiner::~FPGAMiner()
 void FPGAMiner::enumDevices(std::map<string, DeviceDescriptor>& _DevicesCollection)
 {   
 
-    std::vector<cl::Platform> platforms;
+    // std::vector<cl::Platform> platforms;
 
-    cl_int clErr = cl::Platform::get(&platforms);
-    if(clErr != CL_SUCCESS)
-    {
-        printf("Error: Failed to get platforms...\n");
-        exit(1);
-    }
-
-
-    unsigned int xilinx_index;
-    std::string sTempParam;
-
-    for( auto& plat : platforms )
-    {
-        clErr = plat.getInfo(CL_PLATFORM_VENDOR, &sTempParam);
-    }
-
-
-
-
-
-
-
-    // cl_platform_id xilinx_platform_id;
-    // cl_uint platform_count;
-    // cl_platform_id* platforms;
-    //cl_int clErr = clGetPlatformIDs(16, platforms, &platform_count);
+    // cl_int clErr = cl::Platform::get(&platforms);
     // if(clErr != CL_SUCCESS)
     // {
-    //     printf("Error: Failed to get platform IDs...\n");
+    //     printf("Error: Failed to get platforms...\n");
     //     exit(1);
     // }
+
+
+    // unsigned int xilinx_index;
+    // std::string sTempParam;
+
+    // for( auto& plat : platforms )
+    // {
+    //     clErr = plat.getInfo(CL_PLATFORM_VENDOR, &sTempParam);
+
+    //     std::cout << sTempParam << std::endl;
+    // }
+
+
+
+
+
+
+
+    cl_platform_id xilinx_platform_id;
+    cl_uint platform_count;
+    cl_platform_id* platforms;
+    cl_int clErr = clGetPlatformIDs(16, platforms, &platform_count);
+    if(clErr != CL_SUCCESS)
+    {   
+        printf("OpenCL Error : %d\n", clErr);
+        printf("Error: Failed to get platform IDs...\n");
+        exit(1);
+    }
 
 
     // find xilinx platform
@@ -185,27 +188,27 @@ void FPGAMiner::kick_miner()
 void FPGAMiner::workLoop()
 {
 
-    uint32_t zero_x3[3] = {0,0,0};
-    uint64_t startNonce = 0;
+    // uint32_t zero_x3[3] = {0,0,0};
+    // uint64_t startNonce = 0;
 
-    WorkPackage current;
+    // WorkPackage current;
 
-    current.header = h256();
+    // current.header = h256();
 
-    if(!initDevice())
-        return;
+    // if(!initDevice())
+    //     return;
     
-    try
-    {
-        while(0)
-        {
+    // try
+    // {
+    //     while(0)
+    //     {
 
-        }
-    }
-    catch(const std::exception& e)
-    {
-        std::cerr << e.what() << '\n';
-    }
+    //     }
+    // }
+    // catch(const std::exception& e)
+    // {
+    //     std::cerr << e.what() << '\n';
+    // }
     
 
 

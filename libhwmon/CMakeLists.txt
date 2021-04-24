@@ -6,13 +6,13 @@ set(SOURCES
 )
 
 add_library(hwmon ${SOURCES})
-set(HWMON_LINK_LIBRARIES devcore)
+set(HWMON_LINK_LIBRARIES devcore Boost::filesystem)
 
 if (UNIX)
 	list(APPEND HWMON_LINK_LIBRARIES dl)
 endif ()
 
-target_link_libraries(hwmon ${HWMON_LINK_LIBRARIES})
+target_link_libraries(hwmon PUBLIC ${HWMON_LINK_LIBRARIES})
 target_include_directories(hwmon PRIVATE ..)
 
 if (ETHASHCUDA)

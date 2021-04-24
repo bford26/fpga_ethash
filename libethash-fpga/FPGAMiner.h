@@ -7,8 +7,8 @@ This file is part of ethminer-changes
 
 // #include <fstream>
 
-#include <experimental/xrt_kernel.h>
-#include <experimental/xrt_aie.h>
+// #include <experimental/xrt_kernel.h>
+// #include <experimental/xrt_aie.h>
 
 #include <libdevcore/Worker.h>
 #include <libethcore/EthashAux.h>

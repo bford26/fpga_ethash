@@ -888,6 +888,20 @@ int main(int argc, char** argv)
     // 4 - Possible corruption
 
 
+    MinerCLI cli;
+    
+    // Argument validation either throws exception
+    // or returns false which means do not continue
+    if (!cli.validateArgs(argc, argv))
+        return 0;
+
+    cli.execute();
+
+    
+
+    // just for testing
+    if(0)
+    {
 
     // Always out release version
     auto* bi = ethminer_get_buildinfo();
@@ -964,6 +978,7 @@ int main(int argc, char** argv)
         return 4;
     }
     
+    }
 
 
     return 0;
