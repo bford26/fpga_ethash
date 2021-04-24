@@ -48,3 +48,13 @@ _deps
 out/build/
 
 [Bb][Uu][Ii][Ll][Dd]/
+
+libethash-fpga/emconfig.json
+*.xo
+*.xclbin
+
+
+.vscode
+
+
+

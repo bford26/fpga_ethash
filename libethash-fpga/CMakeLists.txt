@@ -1,54 +1,43 @@
-# file(GLOB sources "*.cpp")
-# file(GLOB headers "*.h")
+# A custom command and target to turn the OpenCL kernel into a byte array header
+# The normal build depends on it properly and if the kernel file is changed, then
+# a rebuild of libethash-cl should be triggered
+
+#TODO: clean up the copy&pasting here
+# add_custom_command(
+# 	OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/ethash.h
+# 	COMMAND ${CMAKE_COMMAND} ARGS
+# 	-DBIN2H_SOURCE_FILE="${CMAKE_CURRENT_SOURCE_DIR}/kernels/cl/ethash.cl"
+# 	-DBIN2H_VARIABLE_NAME=ethash_cl
+# 	-DBIN2H_HEADER_FILE="${CMAKE_CURRENT_BINARY_DIR}/ethash.h"
+# 	-P "${CMAKE_CURRENT_SOURCE_DIR}/bin2h.cmake"
+# 	COMMENT "Generating OpenCL Kernel Byte Array"
+# 	DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/kernels/cl/ethash.cl
+# )
+
+# add_custom_target(clbin2h_stable DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/ethash.h ${CMAKE_CURRENT_SOURCE_DIR}/cl/ethash.cl)
+
+# set(SOURCES
+# 	CLMiner.h CLMiner.cpp
+# 	${CMAKE_CURRENT_BINARY_DIR}/ethash.h
+# )
+
+set(CMAKE_CXX_STANDARD 14)
+
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(..)
+
+
+# =================== CREATE HOST LIB FILE =======================
 
 
 
-# will create the platform folders for deploying app
-# add_custom_target(build-time-make-platform-directory ALL COMMAND ${CMAKE_COMMAND} -E make_directory /libethash-fpga/${FPGA_PLATFORM})
-# add_custom_target(build-time-make-platform-hw-directory ALL COMMAND ${CMAKE_COMMAND} -E make_directory /libethash-fpga/${FPGA_PLATFORM}/hw)
-# add_custom_target(build-time-make-platform-hw_emu-directory ALL COMMAND ${CMAKE_COMMAND} -E make_directory /libethash-fpga/${FPGA_PLATFORM}/hw_emu)
-# add_custom_target(build-time-make-platform-sw_emu-directory ALL COMMAND ${CMAKE_COMMAND} -E make_directory /libethash-fpga/${FPGA_PLATFORM}/sw_emu)
-
-
-# CREATE HOST LIB FILE
 add_library(ethash-fpga FPGAMiner.cpp FPGAMiner.h)
 
-target_include_directories(ethash-fpga PUBLIC ${XILINX_XRT}/include)
-target_link_directories(ethash-fpga PUBLIC ${XILINX_XRT}/lib)
-target_link_libraries(ethash-fpga PUBLIC OpenCL pthread rt stdc++)
+# find_package(OpenCL REQUIRED)
 
+target_include_directories(ethash-fpga PRIVATE $ENV{XILINX_XRT}/include)
+target_link_directories(ethash-fpga PRIVATE ${XILINX_XRT}/lib)
 
+target_link_libraries(ethash-fpga PUBLIC xrt_coreutil OpenCL pthread rt stdc++)
 
-
-
-
-# execute_process(COMMAND source /scripts/xilinx_setup.sh)
-
-# CREATE EMU JSON FILE
-execute_process(COMMAND emconfigutil --platform xilinx_u280_xdma_201920_3 --nd 1)
-# add_custom_target(build-time-emconfigutil ALL COMMAND emconfigutil --platform xilinx_u280_xdma_201920_3 --nd 1)
-
-# CREATE XCLBIN 
-# add_custom_target(xilinx_xclbin ALL COMMAND v++ -c -t sw_emu --config ./configs/${FPGA_PLATFORM}.cfg -k kernel kernel.cpp -o ./${FPGA_PLATFORM}/sw_emu/kernel.xo)
-# target_include_directories(xilinx_xclbin PUBLIC )
-
-
-
-
-
-
-
-# execute_process(COMMAND g++ -Wall -g -std=c++11 ./src/host.cpp -o app.exe -I${XILINX_XRT}/include/ -L${XILINX_XRT}/lib/ -lOpenCL -lpthread -lrt -lstdc++)
-execute_process(COMMAND v++ -c -t sw_emu --config ./src/u280.cfg -k vadd -I./src ./src/vadd.cpp -o ./build/vadd.xo)
-execute_process(COMMAND v++ -l -t sw_emu --config ./src/u280.cfg ./build/vadd.xo -o vadd.xclbin)
-
-
-
-# add_library(ethash-fpga ${sources} ${headers})
-
-# installs 
-# install(TARGETS ethash-fpga DESTINATION lib)
-# install(FILES ${headers} DESTINATION include)
-
-# target_link_libraries(ethash-fpga ethcore ethash::ethash Boost::thread)
-# target_include_directories(ethash-fgpa PRIVATE .. ${CMAKE_CURRENT_BINARY_DIR})
+target_link_libraries(ethash-fpga PUBLIC ethcore ethash::ethash)

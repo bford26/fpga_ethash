@@ -1,2 +1,1 @@
-cd out/build ; make
-
+cmake --build ./build

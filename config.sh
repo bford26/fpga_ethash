@@ -1,2 +1,2 @@
-cmake -S . -B out/build
+cmake -DETHASHFPGA=ON -DUSE_SYS_OPENCL=ON -DDEVBUILD=ON -B ./build 
 

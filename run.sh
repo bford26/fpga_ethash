@@ -1,2 +1,2 @@
 
-cd out/build ; ./FPGA_BUILD
+./build/ethminer/ethminer1
