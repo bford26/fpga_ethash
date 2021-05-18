@@ -124,6 +124,11 @@ struct CPSettings : public MinerSettings
 // Holds settings for FPGA Miner
 struct FPGASettings : public MinerSettings
 {
+    bool noBinary = false;
+    bool noExit = false;
+    unsigned globalWorkSize = 0;
+    unsigned globalWorkSizeMultiplier = 65536;
+    unsigned localWorkSize = 128;
 };
 
 struct SolutionAccountType

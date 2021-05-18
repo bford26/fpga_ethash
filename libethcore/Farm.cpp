@@ -262,9 +262,10 @@ bool Farm::start()
 
             if (it->second.subscriptionType == DeviceSubscriptionTypeEnum::Fpga)
             {
-                minerTelemetry.prefix = "cl";
+                minerTelemetry.prefix = "fp";
                 m_miners.push_back(std::shared_ptr<Miner>(
                     new FPGAMiner(m_miners.size(), m_FPGASettings, it->second)));
+                // printf("\nadded fpga miner to farm\n");
             }
 #endif
 

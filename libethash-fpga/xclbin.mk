@@ -1,9 +1,9 @@
 VPP := $(XILINX_VITIS)/bin/v++
-MODE := hw
-DSA := $(XPFM_FILE_PATH)
+MODE := sw_emu
+DSA := xilinx_u280_xdma_201920_3
 
 # sources
-KERNEL_SRC := kernel.cl
+KERNEL_SRC := kernel_func.cpp
 
 # targets
 XO1 := kernel.$(MODE).xo

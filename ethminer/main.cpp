@@ -433,7 +433,7 @@ public:
                 cout << resetiosflags(ios::left) << endl;
                 it++;
             }
-
+            printf("\nWill not mine, if listing devices...\n\n");
             return;
         }
 
@@ -461,6 +461,7 @@ public:
             }
         }
 
+        // printf("\ndescrete subs done\n");
 
         // Subscribe all detected devices
         if (!m_FPGASettings.devices.size() &&
@@ -474,6 +475,8 @@ public:
                 it->second.subscriptionType = DeviceSubscriptionTypeEnum::Fpga;
             }
         }
+
+        // printf("\nall subs done\n");
 
         // Count of subscribed devices
         int subscribedDevices = 0;
@@ -497,10 +500,18 @@ public:
         signal(SIGINT, MinerCLI::signalHandler);
         signal(SIGTERM, MinerCLI::signalHandler);
 
+
+        // printf("\nnew Farm() initialized\n\n");
+        m_FarmSettings.hwMon = 0;
         // Initialize Farm
         new Farm(m_DevicesCollection, m_FarmSettings, m_FPGASettings);
 
         // Run Miner
+
+// #ifdef DEV_BUILD
+//         printf("\nMinerCLI::doMiner() ... begin\n\n");
+// #endif
+
         doMiner();
     }
 
@@ -888,15 +899,21 @@ int main(int argc, char** argv)
     // 4 - Possible corruption
 
 
+    printf("\n\n");
+
+// #ifdef DEV_BUILD
+//         printf("\nDEV_BUILD ACTIVE\n\n");
+// #endif
+
     MinerCLI cli;
     
-    // Argument validation either throws exception
-    // or returns false which means do not continue
+    // // Argument validation either throws exception
+    // // or returns false which means do not continue
     if (!cli.validateArgs(argc, argv))
         return 0;
 
     cli.execute();
-
+    cout << endl << endl;
     
 
     // just for testing

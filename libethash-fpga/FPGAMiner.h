@@ -25,7 +25,10 @@ This file is part of ethminer-changes
 #define CL_HPP_CL_1_2_DEFAULT_BUILD true
 #define CL_HPP_TARGET_OPENCL_VERSION 120
 #define CL_HPP_MINIMUM_OPENCL_VERSION 120
-#include "CL/cl2.hpp"
+
+#include "xcl2.hpp"
+#include <CL/cl_ext_xilinx.h>
+
 #pragma GCC diagnostic pop
 
 // macOS OpenCL fix:
@@ -37,6 +40,7 @@ This file is part of ethminer-changes
 #define CL_DEVICE_COMPUTE_CAPABILITY_MINOR_NV 0x4001
 #endif
 
+#define DATA_SIZE 4096
 
 namespace dev
 {
@@ -52,8 +56,15 @@ public:
     
     static void enumDevices(std::map<string, DeviceDescriptor>& _DevicesCollection);
 
-    void search(const dev::eth::WorkPackage& w);
+    // void search(const dev::eth::WorkPackage& w);
 
+public:
+
+    static char nibbleToChar(unsigned nibble);
+    static uint8_t charToNibble(char chr);
+    static std::vector<uint8_t> hexStringToBytes(char const* str);
+    static std::string bytesToHexString(uint8_t const* bytes, unsigned size);
+    
 protected:
     bool initDevice() override;
     bool initEpoch_internal() override;
@@ -63,17 +74,26 @@ private:
 
     void workLoop() override;
 
+    vector<cl::Context> m_context;
+    vector<cl::CommandQueue> m_queue;
+    vector<cl::CommandQueue> m_abortqueue;
+    cl::Kernel m_searchKernel;
+    cl::Kernel m_dagKernel;
+    cl::Device m_device;
+
     vector<cl::Buffer> m_dag;
     vector<cl::Buffer> m_light;
     vector<cl::Buffer> m_header;
     vector<cl::Buffer> m_searchBuffer;
 
-    void clear_buffer()
-    {
+    void clear_buffer() {
         m_dag.clear();
         m_light.clear();
         m_header.clear();
         m_searchBuffer.clear();
+        m_queue.clear();
+        m_context.clear();
+        m_abortqueue.clear();
     }
     
     FPGASettings m_settings;
